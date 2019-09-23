@@ -1,9 +1,21 @@
 import React, { useState, useEffect } from "react";
 
+const useWindowWidth = () => {
+  const [width, setWidth] = useState(window.innerWidth);
+  useEffect(() => {
+    const handleResize = () => setWidth(window.innerWidth);
+    window.addEventListener("resize", handleResize);
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  });
+  return width; 
+}; 
+
 const MyInput = () => {
   const [surname, setSurname] = useState("Potter");
   const [name, setName] = useState("Harry");
-  const [width, setWidth] = useState(window.innerWidth);
+  const width = useWindowWidth();
 
   const handleNameChange = e => {
     setName(e.target.value);
@@ -14,14 +26,6 @@ const MyInput = () => {
 
   useEffect(() => {
     document.title = `${name} ${surname}`;
-  });
-
-  useEffect(() => {
-    const handleResize = () => setWidth(window.innerWidth);
-    window.addEventListener("resize", handleResize);
-    return () => {
-      window.removeEventListener("resize", handleResize);
-    };
   });
 
   return (
@@ -36,5 +40,7 @@ const MyInput = () => {
     </>
   );
 };
+
+
 
 export default MyInput;
